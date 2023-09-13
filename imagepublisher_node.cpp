@@ -1,8 +1,8 @@
 #include "cv_bridge/cv_bridge.h"
-#include "image_transport/image_transport.hpp"
 #include "opencv2/core/mat.hpp"
 #include "opencv2/imgcodecs.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "rclcpp/publisher.hpp"
 #include <vector>
 #include <string>
 
@@ -11,8 +11,8 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
   rclcpp::NodeOptions options;
   rclcpp::Node::SharedPtr node = rclcpp::Node::make_shared("image_publisher", options);
-  image_transport::ImageTransport it(node);
-  image_transport::Publisher pub = it.advertise("camera/image", 1);
+
+  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr  pub = node->create_publisher<sensor_msgs::msg::Image>("topic_image", 10);
 
   std::vector<sensor_msgs::msg::Image::SharedPtr> ubuntu_img;
 
@@ -29,10 +29,11 @@ int main(int argc, char ** argv)
 
   while (rclcpp::ok()) {
     for(int i=0;i<8;i++){
-      pub.publish(ubuntu_img.at(i));
+      pub->publish(*ubuntu_img.at(i).get());
       rclcpp::spin_some(node);
       //loop_rate.sleep();
     }
   }
   return 0;
 }
+

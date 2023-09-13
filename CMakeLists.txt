@@ -8,7 +8,6 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(cv_bridge REQUIRED)
-find_package(image_transport REQUIRED)
 find_package(OpenCV REQUIRED COMPONENTS imgcodecs)
 find_package(rclcpp REQUIRED)
 
@@ -19,7 +18,6 @@ find_package(rclcpp REQUIRED)
 add_executable(imagepublisher_node imagepublisher_node.cpp)
 target_link_libraries(imagepublisher_node PRIVATE
   cv_bridge::cv_bridge
-  image_transport::image_transport
   opencv_imgcodecs
   rclcpp::rclcpp
 )
